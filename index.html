@@ -1101,8 +1101,8 @@ We will add new paradigms as they emerge.
                       {
                         Model: 'AGI Inc. OSAgent',
                         Institution: 'AGI Inc. (The AGI Company)',
-                        PaperLink: 'https://www.theagi.company/blog/desktop-agent',
-                        PaperAuthors: 'AGI Research Team',
+                        PaperLink: 'https://www.theagi.company/blog/osworld',
+                        PaperAuthors: 'The World\'s Most Capable Computer Agent',
                         'Approach type': 'Specialized model',
                         'Max steps': 100,
                         'Additional a11y tree used': 'No',
@@ -1128,8 +1128,8 @@ We will add new paradigms as they emerge.
                       {
                         Model: 'Claude Opus 4.6',
                         Institution: 'Anthropic',
-                        PaperLink: 'https://venturebeat.com/orchestration/anthropics-sonnet-4-6-matches-flagship-ai-performance-at-one-fifth-the-cost/',
-                        PaperAuthors: 'Reported Feb 22, 2026',
+                        PaperLink: 'https://www.anthropic.com/news/claude-opus-4-6',
+                        PaperAuthors: 'Introducing Claude Opus 4.6',
                         'Approach type': 'General model',
                         'Max steps': 100,
                         'Additional a11y tree used': 'No',
@@ -1141,8 +1141,8 @@ We will add new paradigms as they emerge.
                       {
                         Model: 'Claude Sonnet 4.6',
                         Institution: 'Anthropic',
-                        PaperLink: 'https://venturebeat.com/orchestration/anthropics-sonnet-4-6-matches-flagship-ai-performance-at-one-fifth-the-cost/',
-                        PaperAuthors: 'Reported Feb 22, 2026',
+                        PaperLink: 'https://www.anthropic.com/news/claude-sonnet-4-6',
+                        PaperAuthors: 'Introducing Claude Sonnet 4.6',
                         'Approach type': 'General model',
                         'Max steps': 100,
                         'Additional a11y tree used': 'No',
@@ -1168,7 +1168,7 @@ We will add new paradigms as they emerge.
                         Model: 'Kimi K2.5 (Thinking)',
                         Institution: 'Moonshot AI',
                         PaperLink: 'https://www.kimi.com/blog/kimi-k2-5.html',
-                        PaperAuthors: 'Moonshot AI Team',
+                        PaperAuthors: 'Kimi K2.5 Tech Blog',
                         'Approach type': 'General model',
                         'Max steps': 100,
                         'Additional a11y tree used': 'No',
@@ -1180,8 +1180,18 @@ We will add new paradigms as they emerge.
                       {
                         Model: 'Seed-1.8 (ByteDance)',
                         Institution: 'ByteDance Seed',
-                        PaperLink: 'https://seed.bytedance.com/en/seed1_8',
-                        PaperAuthors: 'Reported Feb 22, 2026',
+                        PaperLink: 'https://lf3-static.bytednsdoc.com/obj/eden-cn/lapzild-tss/ljhwZthlaukjlkulzlp/research/Seed-1.8-Modelcard.pdf',
+                        PaperAuthors: 'Seed-1.8 resources',
+                        PaperLinks: [
+                          {
+                            label: 'Seed-1.8 Model Card (PDF)',
+                            url: 'https://lf3-static.bytednsdoc.com/obj/eden-cn/lapzild-tss/ljhwZthlaukjlkulzlp/research/Seed-1.8-Modelcard.pdf'
+                          },
+                          {
+                            label: 'Official Release Blog',
+                            url: 'https://seed.bytedance.com/en/blog/official-release-of-seed1-8-a-generalized-agentic-model'
+                          }
+                        ],
                         'Approach type': 'General model',
                         'Max steps': 100,
                         'Additional a11y tree used': 'No',
@@ -1206,8 +1216,18 @@ We will add new paradigms as they emerge.
                       {
                         Model: 'OpenAI GPT-5.2',
                         Institution: 'OpenAI',
-                        PaperLink: 'https://os-world.github.io/#benchmark',
-                        PaperAuthors: 'Reported Feb 22, 2026',
+                        PaperLink: 'https://openai.com/index/introducing-gpt-5-2/',
+                        PaperAuthors: 'OpenAI technical posts',
+                        PaperLinks: [
+                          {
+                            label: 'Introducing GPT-5.2',
+                            url: 'https://openai.com/index/introducing-gpt-5-2/'
+                          },
+                          {
+                            label: 'Model Release Notes (Feb 2026)',
+                            url: 'https://help.openai.com/en/articles/9624314-model-release-notes'
+                          }
+                        ],
                         'Approach type': 'General model',
                         'Max steps': 100,
                         'Additional a11y tree used': 'No',
@@ -1418,6 +1438,7 @@ We will add new paradigms as they emerge.
                             Date: row.Date, // Will be updated to the latest date
                             PaperLink: row.PaperLink,
                             PaperAuthors: row.PaperAuthors,
+                            PaperLinks: row.PaperLinks,
                             runs: [],
                             successRates: [],
                             categoryData: {}, // Store data for each category
@@ -2017,6 +2038,20 @@ We will add new paradigms as they emerge.
                             // Show raw value if parsing failed
                             dateDisplay = String(row.Date);
                           }
+
+                          // Render one or multiple source links
+                          let linkMarkup = '';
+                          if (Array.isArray(row.PaperLinks) && row.PaperLinks.length > 0) {
+                            linkMarkup = row.PaperLinks
+                              .map(link => {
+                                const linkUrl = link?.url || '#';
+                                const linkLabel = link?.label || 'Paper Link';
+                                return `<a class="link" href="${linkUrl}" target="_blank" style="color: #3273dc; text-decoration: none;">${linkLabel}</a>`;
+                              })
+                              .join('<span style="color:#999; margin: 0 6px;">•</span>');
+                          } else if (row.PaperLink) {
+                            linkMarkup = `<a class="link" href="${row.PaperLink}" target="_blank" style="color: #3273dc; text-decoration: none;">${row.PaperAuthors || 'Paper Link'}</a>`;
+                          }
                           
                           tableRowsHTML += `
                             <tr ${isFirstRank ? 'class="first-rank-row"' : ''}>
@@ -2041,7 +2076,7 @@ We will add new paradigms as they emerge.
                                 </div>
                                 <p class="institution" style="color: #666; font-size: 0.9em; margin: 2px 0;">${row.Institution || ''}</p>
                                 ${dateDisplay ? `<p class="eval-date" style="color: #999; font-size: 0.8em; margin: 2px 0;">📅 ${dateDisplay}</p>` : ''}
-                                ${row.PaperLink ? `<a class="link" href="${row.PaperLink}" target="_blank" style="color: #3273dc; text-decoration: none;">${row.PaperAuthors || 'Paper Link'}</a>` : ''}
+                                ${linkMarkup}
                               </td>
                               <td style="font-size: 0.9em; white-space: normal; vertical-align: middle;">
                                 <div><strong>Type:</strong> ${row['Approach type'] || 'N/A'}</div>
