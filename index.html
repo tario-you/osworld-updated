@@ -1266,7 +1266,7 @@ We will add new paradigms as they emerge.
                             url: 'https://arxiv.org/pdf/2510.17790v2'
                           }
                         ],
-                        'Approach type': 'Agentic model',
+                        'Approach type': 'Agentic framework',
                         'Max steps': 15,
                         'Additional a11y tree used': 'No',
                         'Additional coding-based action': 'No',
@@ -1289,7 +1289,7 @@ We will add new paradigms as they emerge.
                             url: 'https://arxiv.org/pdf/2510.17790v2'
                           }
                         ],
-                        'Approach type': 'Agentic model',
+                        'Approach type': 'Agentic framework',
                         'Max steps': 15,
                         'Additional a11y tree used': 'No',
                         'Additional coding-based action': 'No',
@@ -1612,7 +1612,7 @@ We will add new paradigms as they emerge.
                       // Aggregate data by Model and Max steps
                       let aggregatedData = aggregateByModelAndSteps(validData);
                       // Sub-scope filter
-                      if (!window.verifiedSubTab) window.verifiedSubTab = 'foundation';
+                      if (!window.verifiedSubTab) window.verifiedSubTab = 'all';
                       const isFoundationMode = window.verifiedSubTab === 'foundation';
                       if (isFoundationMode) {
                         aggregatedData = aggregatedData.filter(r => r.isFoundationE2E);
