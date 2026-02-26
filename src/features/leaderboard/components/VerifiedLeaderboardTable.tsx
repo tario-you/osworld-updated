@@ -1,15 +1,36 @@
-import { Fragment, useEffect, useMemo, useState } from 'react';
+import { Fragment, useMemo, useState } from 'react';
 import {
   type ColumnDef,
   flexRender,
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table';
+import { CalendarDays, ChevronDown, ChevronRight } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
 import type { AggregatedVerifiedRow, LeaderboardScope } from '../types';
 
 interface VerifiedLeaderboardTableProps {
   rows: AggregatedVerifiedRow[];
   scope: LeaderboardScope;
+}
+
+function toScoreLabel(row: AggregatedVerifiedRow): string {
+  if (row.successRateStd > 0) {
+    return `${row.successRateAvg.toFixed(2)}±${row.successRateStd.toFixed(2)}%`;
+  }
+
+  return `${row.successRateAvg.toFixed(2)}%`;
 }
 
 export function VerifiedLeaderboardTable({
@@ -18,61 +39,79 @@ export function VerifiedLeaderboardTable({
 }: VerifiedLeaderboardTableProps) {
   const [expandedRowId, setExpandedRowId] = useState<string | null>(null);
 
-  useEffect(() => {
-    setExpandedRowId(null);
-  }, [rows]);
+  const activeExpandedRowId = useMemo(() => {
+    if (!expandedRowId) {
+      return null;
+    }
+
+    return rows.some((row) => row.id === expandedRowId) ? expandedRowId : null;
+  }, [expandedRowId, rows]);
 
   const columns = useMemo<ColumnDef<AggregatedVerifiedRow>[]>(
     () => [
       {
         id: 'rank',
-        header: 'Rank',
+        header: '#',
         cell: (info) => {
           const rank = info.row.index + 1;
           return (
-            <span className={rank === 1 ? 'rank rank--first' : 'rank'}>
-              {rank}
+            <span className="font-mono text-sm text-muted-foreground">
+              {rank.toString().padStart(2, '0')}
             </span>
           );
         },
       },
       {
         id: 'model',
-        header: 'Model & Date',
+        header: 'Model',
         cell: (info) => {
           const row = info.row.original;
           return (
-            <div className="model-cell">
-              <div className="model-title-row">
-                <strong>{row.model}</strong>
-                <span className="model-tags">
-                  {row.hasAdditionalA11yTree && (
-                    <span title="Uses additional a11y tree">🌳</span>
-                  )}
-                  {scope === 'all' && row.hasAdditionalTool && (
-                    <span title="Uses additional coding-based action">💻</span>
-                  )}
-                  {scope === 'all' && row.hasMultipleRollout && (
-                    <span title="Multiple rollout">🔁</span>
-                  )}
-                  {scope === 'all' && row.hasRetryStrategy && (
-                    <span title="Retry / self-verification">↺</span>
-                  )}
-                </span>
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <p className="font-medium">{row.model}</p>
+                {row.hasAdditionalA11yTree && (
+                  <Badge variant="secondary" className="h-5 text-[10px]">
+                    🌳
+                  </Badge>
+                )}
+                {scope === 'all' && row.hasAdditionalTool && (
+                  <Badge variant="secondary" className="h-5 text-[10px]">
+                    💻
+                  </Badge>
+                )}
+                {scope === 'all' && row.hasMultipleRollout && (
+                  <Badge variant="secondary" className="h-5 text-[10px]">
+                    🔁
+                  </Badge>
+                )}
+                {scope === 'all' && row.hasRetryStrategy && (
+                  <Badge variant="secondary" className="h-5 text-[10px]">
+                    ↺
+                  </Badge>
+                )}
               </div>
               {row.institution && (
-                <p className="subtle-text">{row.institution}</p>
+                <p className="text-xs text-muted-foreground">{row.institution}</p>
               )}
-              {row.dateLabel && <p className="subtle-date">{row.dateLabel}</p>}
+              {row.dateLabel && (
+                <p className="flex items-center gap-1 text-xs text-muted-foreground">
+                  <CalendarDays className="h-3 w-3" />
+                  {row.dateLabel}
+                </p>
+              )}
               {row.sources.length > 0 && (
-                <p className="source-links">
-                  {row.sources.map((source, index) => (
-                    <span key={`${source.url}-${source.label}`}>
-                      {index > 0 ? <span className="source-dot">•</span> : null}
-                      <a href={source.url} target="_blank" rel="noreferrer">
-                        {source.label}
-                      </a>
-                    </span>
+                <p className="flex flex-wrap items-center gap-2 text-xs text-primary">
+                  {row.sources.map((source) => (
+                    <a
+                      key={`${row.id}-${source.url}`}
+                      href={source.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="hover:underline"
+                    >
+                      {source.label}
+                    </a>
                   ))}
                 </p>
               )}
@@ -82,57 +121,59 @@ export function VerifiedLeaderboardTable({
       },
       {
         id: 'details',
-        header: 'Approach & Details',
+        header: 'Details',
         cell: (info) => {
           const row = info.row.original;
           return (
-            <div className="details-cell">
-              <div>
-                <strong>Type:</strong> {row.approachType || 'N/A'}
-              </div>
-              <div>
-                <strong>Max Steps:</strong> {row.maxSteps || 'N/A'}
-              </div>
-              <div>
-                <strong>Runs:</strong> {row.runCount}
-              </div>
+            <div className="flex flex-wrap items-center gap-2 text-xs">
+              <Badge variant="outline">
+                {row.approachType || 'N/A'}
+              </Badge>
+              <Badge variant="outline">
+                {row.maxSteps || 'N/A'} steps
+              </Badge>
+              <Badge variant="outline">
+                {row.runCount} run{row.runCount > 1 ? 's' : ''}
+              </Badge>
             </div>
           );
         },
       },
       {
         id: 'score',
-        header: 'Success Rate',
+        header: 'Score',
         cell: (info) => {
           const row = info.row.original;
-          const display =
-            row.successRateStd > 0
-              ? `${row.successRateAvg.toFixed(2)}±${row.successRateStd.toFixed(2)}%`
-              : `${row.successRateAvg.toFixed(2)}%`;
-          const isExpanded = expandedRowId === row.id;
+          const isExpanded = activeExpandedRowId === row.id;
 
           return (
-            <div className="score-cell">
-              <strong className="score-value">{display}</strong>
+            <div className="flex items-center justify-between gap-2">
+              <span className="font-semibold">{toScoreLabel(row)}</span>
               {row.categoryColumns.length > 0 && (
-                <button
-                  type="button"
-                  className="expand-button"
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  className="h-7 px-2"
                   onClick={() => {
                     setExpandedRowId((current) =>
                       current === row.id ? null : row.id,
                     );
                   }}
                 >
-                  {isExpanded ? 'Hide details' : 'Show details'}
-                </button>
+                  {isExpanded ? (
+                    <ChevronDown className="h-3.5 w-3.5" />
+                  ) : (
+                    <ChevronRight className="h-3.5 w-3.5" />
+                  )}
+                  <span className="text-xs">Breakdown</span>
+                </Button>
               )}
             </div>
           );
         },
       },
     ],
-    [expandedRowId, scope],
+    [activeExpandedRowId, scope],
   );
 
   const table = useReactTable({
@@ -142,75 +183,97 @@ export function VerifiedLeaderboardTable({
   });
 
   return (
-    <div className="table-wrap">
-      <table className="leaderboard-table">
-        <thead>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <tr key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <th key={header.id}>
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext(),
-                      )}
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody>
-          {table.getRowModel().rows.map((row) => {
-            const original = row.original;
-            const isExpanded = expandedRowId === original.id;
+    <Card>
+      <ScrollArea className="w-full">
+        <Table className="min-w-[920px]">
+          <TableHeader>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id} className="hover:bg-transparent">
+                {headerGroup.headers.map((header) => (
+                  <TableHead
+                    key={header.id}
+                    className="h-11 bg-muted/40 text-xs uppercase tracking-wide text-muted-foreground"
+                  >
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext(),
+                        )}
+                  </TableHead>
+                ))}
+              </TableRow>
+            ))}
+          </TableHeader>
+          <TableBody>
+            {table.getRowModel().rows.map((row) => {
+              const original = row.original;
+              const isExpanded = activeExpandedRowId === original.id;
 
-            return (
-              <Fragment key={row.id}>
-                <tr className={row.index === 0 ? 'top-row' : undefined}>
-                  {row.getVisibleCells().map((cell) => (
-                    <td key={cell.id}>
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </td>
-                  ))}
-                </tr>
-                {isExpanded && original.categoryColumns.length > 0 && (
-                  <tr>
-                    <td colSpan={4} className="expanded-cell">
-                      <div className="domain-breakdown-wrap">
-                        <table className="domain-breakdown-table">
-                          <thead>
-                            <tr>
-                              {original.runCount > 1 && <th>Run</th>}
-                              {original.categoryColumns.map((column) => (
-                                <th key={`${original.id}-${column}`}>{column}</th>
-                              ))}
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {original.runs.map((run, runIndex) => (
-                              <tr key={`${original.id}-run-${runIndex}`}>
+              return (
+                <Fragment key={row.id}>
+                  <TableRow
+                    className="hover:bg-muted/40"
+                    data-state={row.index === 0 ? 'selected' : undefined}
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id} className="py-3 align-top">
+                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                  {isExpanded && original.categoryColumns.length > 0 && (
+                    <TableRow className="hover:bg-transparent">
+                      <TableCell colSpan={4} className="bg-muted/40 py-3">
+                        <ScrollArea className="w-full whitespace-nowrap">
+                          <table className="w-max min-w-full border-collapse text-xs">
+                            <thead>
+                              <tr>
                                 {original.runCount > 1 && (
-                                  <td>Run {runIndex + 1}</td>
+                                  <th className="border border-border px-3 py-2 text-left text-foreground/80">
+                                    Run
+                                  </th>
                                 )}
                                 {original.categoryColumns.map((column) => (
-                                  <td key={`${original.id}-${runIndex}-${column}`}>
-                                    {run.categoryValues[column]}
-                                  </td>
+                                  <th
+                                    key={`${original.id}-${column}`}
+                                    className="border border-border px-3 py-2 text-left text-foreground/80"
+                                  >
+                                    {column}
+                                  </th>
                                 ))}
                               </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
-                    </td>
-                  </tr>
-                )}
-              </Fragment>
-            );
-          })}
-        </tbody>
-      </table>
-    </div>
+                            </thead>
+                            <tbody>
+                              {original.runs.map((run, runIndex) => (
+                                <tr key={`${original.id}-run-${runIndex}`}>
+                                  {original.runCount > 1 && (
+                                    <td className="border border-border px-3 py-2 text-muted-foreground">
+                                      {runIndex + 1}
+                                    </td>
+                                  )}
+                                  {original.categoryColumns.map((column) => (
+                                    <td
+                                      key={`${original.id}-${runIndex}-${column}`}
+                                      className="border border-border px-3 py-2"
+                                    >
+                                      {run.categoryValues[column] || '-'}
+                                    </td>
+                                  ))}
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </ScrollArea>
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </Fragment>
+              );
+            })}
+          </TableBody>
+        </Table>
+      </ScrollArea>
+    </Card>
   );
 }

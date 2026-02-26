@@ -21,9 +21,18 @@ DONT ASK ME TO MAKE DECISIONS ABOUT IMPLEMENTATION STRATEGIES. GO MAKE THESE DEC
 
 REMEMBER DON'T EVER SACRIFICE PRECISION AND UNDERSTANDING FOR SPEED. I WOULD RATHER YOU TAKE YOUR TIME AND FULLY UNDERSTAND THE PROBLEM THAN FUCKING SPEEDING THROUGH ON THE WRONG DECISIONS.
 
-note: you never have to ask permission to run `npm run lint`
+note: you never have to ask permission to run `bun run lint`
 note: you never have to ask perimssion to inspect files or to continue investigating
 note: if there is currently another process that is running the app / checking the app / developing the app, then dont interfere with it and just move on
+
+## Frontend Stack Requirements
+
+- package manager/runtime: use `bun` for all install/run/build/test/lint commands.
+- dont use `npm`, `yarn`, or `pnpm` commands in this repo unless explicitly requested.
+- use Tailwind CSS for styling. prefer utility classes and shared design tokens in the Tailwind/theme layer over ad-hoc css files.
+- use `shadcn/ui` components for UI primitives and composition (buttons, cards, tables, tabs, inputs, etc).
+- when adding new UI, start from `shadcn/ui` components first, then extend only as needed.
+- for shadcn operations use `bunx --bun shadcn@latest ...`.
 
 ## Default Trajectory Formatting Rule
 
