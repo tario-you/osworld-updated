@@ -21,6 +21,7 @@ import {
 } from '@/components/ui/table';
 import type { DataRow } from '../types';
 import { formatDateLabel, parseDateValue, toNumberValue, toStringValue } from '../parsing';
+import { resolveProviderIcon } from '../provider-icons';
 import { selfReportedScore } from '../transform';
 
 interface SelfReportedTableProps {
@@ -138,6 +139,7 @@ export function SelfReportedTable({ rows, showDetails }: SelfReportedTableProps)
         header: ({ column }) => <SortableHeader column={column} label="Model" />,
         cell: (info) => {
           const row = info.row.original;
+          const providerIcon = resolveProviderIcon(row.institution, row.model, row.paperLink);
           return (
             <div className="w-[320px] min-w-[320px] max-w-[320px]">
               {!showDetails && row.paperLink ? (
@@ -145,12 +147,30 @@ export function SelfReportedTable({ rows, showDetails }: SelfReportedTableProps)
                   href={row.paperLink}
                   target="_blank"
                   rel="noreferrer"
-                  className="block truncate font-medium text-primary hover:underline"
+                  className="flex min-w-0 items-center gap-2 font-medium text-primary hover:underline"
                 >
-                  {row.model}
+                  {providerIcon && (
+                    <img
+                      src={providerIcon.src}
+                      alt={providerIcon.alt}
+                      className="h-4 w-4 shrink-0 rounded-sm object-contain"
+                      loading="lazy"
+                    />
+                  )}
+                  <span className="truncate">{row.model}</span>
                 </a>
               ) : (
-                <p className="truncate font-medium">{row.model}</p>
+                <div className="flex min-w-0 items-center gap-2">
+                  {providerIcon && (
+                    <img
+                      src={providerIcon.src}
+                      alt={providerIcon.alt}
+                      className="h-4 w-4 shrink-0 rounded-sm object-contain"
+                      loading="lazy"
+                    />
+                  )}
+                  <p className="truncate font-medium">{row.model}</p>
+                </div>
               )}
             </div>
           );

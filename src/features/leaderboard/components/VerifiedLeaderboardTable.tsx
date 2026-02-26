@@ -20,6 +20,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { resolveProviderIcon } from '../provider-icons';
 import type { AggregatedVerifiedRow, LeaderboardScope } from '../types';
 
 interface VerifiedLeaderboardTableProps {
@@ -137,6 +138,7 @@ export function VerifiedLeaderboardTable({
           const row = info.row.original;
           const showToolTags = showDetails && scope === 'all';
           const modelLink = row.sources[0]?.url;
+          const providerIcon = resolveProviderIcon(row.institution, row.model, modelLink);
           const hasTags =
             (showDetails && row.hasAdditionalA11yTree) ||
             (showToolTags && row.hasAdditionalTool) ||
@@ -150,12 +152,30 @@ export function VerifiedLeaderboardTable({
                   href={modelLink}
                   target="_blank"
                   rel="noreferrer"
-                  className="block truncate font-medium text-primary hover:underline"
+                  className="flex min-w-0 items-center gap-2 font-medium text-primary hover:underline"
                 >
-                  {row.model}
+                  {providerIcon && (
+                    <img
+                      src={providerIcon.src}
+                      alt={providerIcon.alt}
+                      className="h-4 w-4 shrink-0 rounded-sm object-contain"
+                      loading="lazy"
+                    />
+                  )}
+                  <span className="truncate">{row.model}</span>
                 </a>
               ) : (
-                <p className="truncate font-medium">{row.model}</p>
+                <div className="flex min-w-0 items-center gap-2">
+                  {providerIcon && (
+                    <img
+                      src={providerIcon.src}
+                      alt={providerIcon.alt}
+                      className="h-4 w-4 shrink-0 rounded-sm object-contain"
+                      loading="lazy"
+                    />
+                  )}
+                  <p className="truncate font-medium">{row.model}</p>
+                </div>
               )}
               {hasTags && (
                 <div className="flex flex-wrap items-center gap-1">
