@@ -132,7 +132,63 @@
     .highlight-mengshou-wrap.active {
         background: #ffb;
     }
-</style></head>
+  </style>
+
+  <style id="leaderboard-only-override">
+    body > :not(#benchmark) {
+      display: none !important;
+    }
+
+    #benchmark {
+      padding-top: 10px;
+    }
+
+    #benchmark > .container:first-child {
+      display: none !important;
+    }
+
+    #benchmark .infoBody > div:first-child,
+    #benchmark .method-type-explainer,
+    #benchmark #verifiedOnlyTabs,
+    #benchmark #allTabsContainer,
+    #benchmark .lib_examples:not(#BoardPanel5) {
+      display: none !important;
+    }
+
+    #benchmark #contentCover {
+      margin-top: 0 !important;
+    }
+
+    #benchmark #BoardPanel5 {
+      display: block !important;
+    }
+
+    #benchmark #contentCover .container-t {
+      width: 95%;
+      max-width: none;
+      margin: 0 auto;
+    }
+
+    #benchmark #credits-note {
+      width: 95%;
+      max-width: none;
+      margin: 0 auto 8px auto;
+      padding: 0 0.5rem;
+      color: #808080;
+      font-size: 12px;
+      line-height: 1.2;
+    }
+
+    #benchmark #credits-note a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    #benchmark #credits-note a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
 
 <body>
 
@@ -756,38 +812,13 @@ analysis).</p>
   </section>
 
   <section id="benchmark">
+    <p id="credits-note">
+      credits: <a href="https://os-world.github.io/" target="_blank" rel="noopener noreferrer">https://os-world.github.io/</a>
+    </p>
     <div class="container" style="max-width: none; width: 95%; margin: 0 auto; transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1), max-width 0.4s cubic-bezier(0.4, 0, 0.2, 1); overflow-x: visible;">
 
       <div style="max-width: 1344px; margin: 0 auto; padding: 0 1.5rem;">
         <h2 class="title is-3">Benchmark</h2>
-        <md-block rendered="content"><p>We adopt state-of-the-art LLM and VLM from open-source representatives such as UI-TARS, Agent-S, Qwen, Mixtral and
-          CogAgent, and closed-source ones from Operator, GPT, Gemini, and Claude families on <strong>OSWorld</strong>, as LLM and VLM agent
-          baselines. We also explore methods such as the Set-of-Marks aided
-          approach, which has been demonstrated to improve spatial capabilities for visual
-          reasoning.
-          <strong>We are actively updating the benchmark with new LLMs, VLMs and methods. Pull requests welcomed!</strong>
-        </p>
-</md-block>
-        
-        <!-- Important Notice about Google Drive Tasks -->
-        <div style="margin: 20px 0; padding: 15px; background: #fff3cd; border: 1px solid #ffeaa7; border-radius: 8px; border-left: 4px solid #fdcb6e;">
-          <h4 style="margin: 0 0 10px 0; color: #856404; display: flex; align-items: center;">
-            <svg class="svg-inline--fa fa-exclamation-triangle fa-w-18" style="margin-right: 8px;" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="exclamation-triangle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" data-fa-i2svg=""><path fill="currentColor" d="M569.517 440.013C587.975 472.007 564.806 512 527.94 512H48.054c-36.937 0-59.999-40.055-41.577-71.987L246.423 23.985c18.467-32.009 64.72-31.951 83.154 0l239.94 416.028zM288 354c-25.405 0-46 20.595-46 46s20.595 46 46 46 46-20.595 46-46-20.595-46-46-46zm-43.673-165.346l7.418 136c.347 6.364 5.609 11.346 11.982 11.346h48.546c6.373 0 11.635-4.982 11.982-11.346l7.418-136c.375-6.874-5.098-12.654-11.982-12.654h-63.383c-6.884 0-12.356 5.78-11.981 12.654z"></path></svg><!-- <i class="fas fa-exclamation-triangle" style="margin-right: 8px;"></i> Font Awesome fontawesome.com -->
-            Important Notice: Google Drive Tasks
-            <span style="margin-left: auto; font-size: 0.8em; font-weight: normal;">(2025-07-28)</span>
-          </h4>
-          <div style="color: #856404; margin: 0;">
-            <p><strong>OSWorld contains 8 Google Drive-related tasks</strong> that may encounter setup issues during task initialization due to IP changes or other network-related factors, even when following our configuration guidelines correctly.</p>
-            
-            <p><strong>Two acceptable approaches for evaluation:</strong></p>
-            <ol style="margin: 10px 0; padding-left: 20px;">
-              <li style="margin: 5px 0;"><strong>Manual Adjustment</strong>: You can manually configure these 8 tasks to complete the full <strong>369 tasks</strong> evaluation</li>
-              <li style="margin: 5px 0;"><strong>Exclude Tasks</strong>: You can exclude these 8 tasks and run <strong>361 tasks</strong> instead - <strong>this is officially permitted and acceptable</strong></li>
-            </ol>
-            
-            <p>Both approaches are valid for benchmark comparison and leaderboard submission.</p>
-          </div>
-        </div>
       </div>
       <!-- Progress Chart (Hidden by default) -->
       <div class="content has-text-justified" style="display: none;">
@@ -1640,47 +1671,6 @@ We will add new paradigms as they emerge.
                       `;
                       
                       let tableHTML = subTabsHTML + `
-                        <div style="margin-bottom: 12px; padding: 10px 12px; border: 1px solid #ffd08a; background: #fff7ea; border-radius: 6px; color: #8a4b00; font-size: 0.92em;">
-                          <strong>Update (Feb 22, 2026):</strong> Added AGI Inc. OSAgent plus latest entries for Claude 4.6, AskUI VisionAgent, Kimi K2.5 (Thinking), Seed-1.8, EvoCUA, and OpenAI GPT-5.2.
-                        </div>
-                        <div style="margin-bottom: 14px; padding: 14px; border: 1px solid #d8d8d8; border-radius: 8px; background: #ffffff;">
-                          <h4 style="margin: 0 0 8px 0; color: #1f2937;">AGI Inc. OSAgent Snapshot (Early 2026)</h4>
-                          <div style="overflow-x:auto;">
-                            <table style="width:100%; border-collapse: collapse; font-size: 0.9em;">
-                              <tr>
-                                <th style="text-align:left; padding:6px; border-bottom:1px solid #e5e7eb;">Model / Agent</th>
-                                <th style="text-align:left; padding:6px; border-bottom:1px solid #e5e7eb;">Success Rate (OSWorld)</th>
-                                <th style="text-align:left; padding:6px; border-bottom:1px solid #e5e7eb;">Status</th>
-                              </tr>
-                              <tr>
-                                <td style="padding:6px; border-bottom:1px solid #f0f0f0;"><strong>AGI Inc. OSAgent</strong></td>
-                                <td style="padding:6px; border-bottom:1px solid #f0f0f0;"><strong>76.26%</strong></td>
-                                <td style="padding:6px; border-bottom:1px solid #f0f0f0;"><strong>Current State-of-the-Art</strong></td>
-                              </tr>
-                              <tr>
-                                <td style="padding:6px; border-bottom:1px solid #f0f0f0;">Human Baseline</td>
-                                <td style="padding:6px; border-bottom:1px solid #f0f0f0;">72.36%</td>
-                                <td style="padding:6px; border-bottom:1px solid #f0f0f0;">Human expert average</td>
-                              </tr>
-                              <tr>
-                                <td style="padding:6px; border-bottom:1px solid #f0f0f0;">Claude 4.6 Opus</td>
-                                <td style="padding:6px; border-bottom:1px solid #f0f0f0;">72.70%</td>
-                                <td style="padding:6px; border-bottom:1px solid #f0f0f0;">Top Generalist Model</td>
-                              </tr>
-                              <tr>
-                                <td style="padding:6px;">AskUI VisionAgent</td>
-                                <td style="padding:6px;">66.20%</td>
-                                <td style="padding:6px;">Leading specialized vision agent</td>
-                              </tr>
-                            </table>
-                          </div>
-                          <p style="margin: 10px 0 0 0; color: #4b5563; font-size: 0.9em;">
-                            Highlighted factors: verification-generation loop, low-level pixel/action policy, and synthetic long-horizon training environments.
-                          </p>
-                          <p style="margin: 8px 0 0 0; color: #4b5563; font-size: 0.9em;">
-                            AGI-0 AndroidWorld note: AGI reports a leading 97.40% pass@1 result on mobile cross-app tasks.
-                          </p>
-                        </div>
                         <div style="margin-bottom: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px;">
                           <h4 style="margin: 0 0 10px 0;">Filters:</h4>
                           <div style="display: flex; gap: 15px; flex-wrap: wrap;">
@@ -19595,27 +19585,6 @@ Please carefully follow the <a href="https://github.com/xlang-ai/OSWorld/blob/ma
       <div class="faq-item">
         <h3 class="faq-question">How to setup the account and credentials for Google and Google Drive?</h3>
         <p class="faq-answer">See <a href="https://github.com/xlang-ai/OSWorld/blob/main/SETUP_GUIDELINE.md#1-google-account-setup">Setup Guideline - Google Account Setup</a>.</p>
-      </div>
-
-      <div class="faq-item">
-        <h3 class="faq-question">What should I do if Google Drive tasks fail to initialize properly?</h3>
-        <p class="faq-answer">
-          <strong>OSWorld contains 8 Google Drive-related tasks</strong> that may encounter setup issues during initialization due to various factors:<br><br>
-          
-          <strong>Common Issues:</strong>
-          </p><ul>
-            <li>IP address changes causing authentication problems</li>
-            <li>Network restrictions or firewalls</li>
-            <li>Google API rate limiting or access restrictions</li>
-            <li>Regional availability limitations</li>
-          </ul>
-          
-          <strong>Solutions:</strong><br>
-          <strong>Option 1 - Manual Configuration:</strong> Manually troubleshoot and configure these 8 tasks to complete the full 369-task evaluation.<br>
-          <strong>Option 2 - Task Exclusion:</strong> Exclude these 8 tasks and run the remaining <strong>361 tasks</strong> - this is <strong>officially permitted and acceptable</strong> for benchmark evaluation.<br><br>
-          
-          <strong>Both approaches are valid for research comparison and leaderboard submission.</strong> Please specify which approach you used when reporting your results.
-        <p></p>
       </div>
 
       <div class="faq-item">
