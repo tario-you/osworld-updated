@@ -83,7 +83,11 @@ export function SelfReportedTable({ rows, showDetails }: SelfReportedTableProps)
 
     setSorting((current) => {
       const currentColumnId = current[0]?.id;
-      if (currentColumnId === 'date' || currentColumnId === 'link') {
+      if (
+        currentColumnId === 'company' ||
+        currentColumnId === 'date' ||
+        currentColumnId === 'link'
+      ) {
         return [{ id: 'score', desc: true }];
       }
       return current;
@@ -152,16 +156,20 @@ export function SelfReportedTable({ rows, showDetails }: SelfReportedTableProps)
           );
         },
       },
-      {
-        id: 'company',
-        accessorFn: (row) => row.institution,
-        header: ({ column }) => <SortableHeader column={column} label="Company" />,
-        cell: (info) => (
-          <span className="block w-[220px] min-w-[220px] max-w-[220px] truncate text-xs text-muted-foreground">
-            {info.row.original.institution || '-'}
-          </span>
-        ),
-      },
+      ...(showDetails
+        ? ([
+            {
+              id: 'company',
+              accessorFn: (row) => row.institution,
+              header: ({ column }) => <SortableHeader column={column} label="Company" />,
+              cell: (info) => (
+                <span className="block w-[220px] min-w-[220px] max-w-[220px] truncate text-xs text-muted-foreground">
+                  {info.row.original.institution || '-'}
+                </span>
+              ),
+            },
+          ] satisfies ColumnDef<SelfReportedRowView>[])
+        : []),
       ...(showDetails
         ? ([
             {
@@ -220,7 +228,7 @@ export function SelfReportedTable({ rows, showDetails }: SelfReportedTableProps)
 
   return (
     <Card>
-      <Table className={showDetails ? 'min-w-[1160px]' : 'min-w-[840px]'}>
+      <Table className={showDetails ? 'min-w-[1160px]' : 'min-w-[640px]'}>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id} className="hover:bg-transparent">

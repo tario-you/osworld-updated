@@ -93,6 +93,7 @@ export function VerifiedLeaderboardTable({
     setSorting((current) => {
       const currentColumnId = current[0]?.id;
       if (
+        currentColumnId === 'company' ||
         currentColumnId === 'date' ||
         currentColumnId === 'link' ||
         currentColumnId === 'modelType' ||
@@ -184,19 +185,23 @@ export function VerifiedLeaderboardTable({
           );
         },
       },
-      {
-        id: 'company',
-        accessorFn: (row) => row.institution,
-        header: ({ column }) => <SortableHeader column={column} label="Company" />,
-        cell: (info) => {
-          const row = info.row.original;
-          return (
-            <span className="block max-w-[220px] truncate text-xs text-muted-foreground">
-              {row.institution || '-'}
-            </span>
-          );
-        },
-      },
+      ...(showDetails
+        ? ([
+            {
+              id: 'company',
+              accessorFn: (row) => row.institution,
+              header: ({ column }) => <SortableHeader column={column} label="Company" />,
+              cell: (info) => {
+                const row = info.row.original;
+                return (
+                  <span className="block max-w-[220px] truncate text-xs text-muted-foreground">
+                    {row.institution || '-'}
+                  </span>
+                );
+              },
+            },
+          ] satisfies ColumnDef<AggregatedVerifiedRow>[])
+        : []),
       ...(showDetails
         ? ([
             {
@@ -317,7 +322,7 @@ export function VerifiedLeaderboardTable({
 
   return (
     <Card>
-      <Table className={showDetails ? "min-w-[1580px]" : "min-w-[960px]"}>
+      <Table className={showDetails ? "min-w-[1580px]" : "min-w-[760px]"}>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id} className="hover:bg-transparent">
