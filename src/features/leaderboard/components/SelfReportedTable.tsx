@@ -228,7 +228,7 @@ export function SelfReportedTable({ rows, showDetails }: SelfReportedTableProps)
 
   return (
     <Card>
-      <Table className={showDetails ? 'min-w-[1160px]' : 'min-w-[640px]'}>
+      <Table className={showDetails ? 'min-w-[1160px]' : 'table-fixed min-w-[640px]'}>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id} className="hover:bg-transparent">
@@ -236,8 +236,10 @@ export function SelfReportedTable({ rows, showDetails }: SelfReportedTableProps)
                 <TableHead
                   key={header.id}
                   className={`text-xs uppercase tracking-wide text-muted-foreground ${
-                    header.id === 'model' ? 'w-[320px] min-w-[320px]' : ''
-                  } ${header.id === 'company' ? 'w-[220px] min-w-[220px]' : ''} ${
+                    header.id === 'rank' ? 'w-[64px] min-w-[64px]' : ''
+                  } ${header.id === 'model' ? 'w-[320px] min-w-[320px]' : ''} ${
+                    header.id === 'company' ? 'w-[220px] min-w-[220px]' : ''
+                  } ${header.id === 'score' ? 'w-[180px] min-w-[180px]' : ''} ${
                     showDetails && header.id === 'date' ? 'w-[130px] min-w-[130px]' : ''
                   } ${showDetails && header.id === 'link' ? 'w-[180px] min-w-[180px]' : ''}`}
                 >
@@ -255,8 +257,10 @@ export function SelfReportedTable({ rows, showDetails }: SelfReportedTableProps)
               {row.getVisibleCells().map((cell) => (
                 <TableCell
                   key={cell.id}
-                  className={`${cell.column.id === 'model' ? 'w-[320px] min-w-[320px] max-w-[320px]' : ''} ${
-                    cell.column.id === 'company' ? 'w-[220px] min-w-[220px] max-w-[220px]' : ''
+                  className={`${cell.column.id === 'rank' ? 'w-[64px] min-w-[64px]' : ''} ${
+                    cell.column.id === 'model' ? 'w-[320px] min-w-[320px] max-w-[320px]' : ''
+                  } ${cell.column.id === 'company' ? 'w-[220px] min-w-[220px] max-w-[220px]' : ''} ${
+                    cell.column.id === 'score' ? 'w-[180px] min-w-[180px]' : ''
                   } ${showDetails && cell.column.id === 'date' ? 'w-[130px] min-w-[130px]' : ''} ${
                     showDetails && cell.column.id === 'link' ? 'w-[180px] min-w-[180px] max-w-[180px]' : ''
                   }`}

@@ -144,7 +144,7 @@ export function VerifiedLeaderboardTable({
             (showToolTags && row.hasRetryStrategy);
 
           return (
-            <div className="max-w-[320px] space-y-1">
+            <div className={showDetails ? 'max-w-[320px] space-y-1' : 'max-w-[260px] space-y-1'}>
               {!showDetails && modelLink ? (
                 <a
                   href={modelLink}
@@ -322,14 +322,14 @@ export function VerifiedLeaderboardTable({
 
   return (
     <Card>
-      <Table className={showDetails ? "min-w-[1580px]" : "min-w-[760px]"}>
+      <Table className={showDetails ? "min-w-[1580px]" : "w-auto table-fixed min-w-[620px]"}>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id} className="hover:bg-transparent">
               {headerGroup.headers.map((header) => (
                 <TableHead
                   key={header.id}
-                  className={`h-11 bg-muted/40 text-xs uppercase tracking-wide text-muted-foreground ${header.id === 'model' ? 'w-[320px] min-w-[320px]' : ''} ${header.id === 'company' ? 'w-[220px] min-w-[220px]' : ''} ${showDetails && header.id === 'date' ? 'w-[130px] min-w-[130px]' : ''} ${showDetails && header.id === 'link' ? 'w-[180px] min-w-[180px]' : ''}`}
+                  className={`h-11 bg-muted/40 text-xs uppercase tracking-wide text-muted-foreground ${header.id === 'rank' ? 'w-[64px] min-w-[64px]' : ''} ${header.id === 'model' ? (showDetails ? 'w-[320px] min-w-[320px]' : 'w-[260px] min-w-[260px]') : ''} ${header.id === 'company' ? 'w-[220px] min-w-[220px]' : ''} ${header.id === 'score' ? 'w-[180px] min-w-[180px]' : ''} ${showDetails && header.id === 'date' ? 'w-[130px] min-w-[130px]' : ''} ${showDetails && header.id === 'link' ? 'w-[180px] min-w-[180px]' : ''}`}
                 >
                   {header.isPlaceholder
                     ? null
@@ -359,13 +359,13 @@ export function VerifiedLeaderboardTable({
                   }
                   data-state={row.index === 0 ? 'selected' : undefined}
                 >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell
-                      key={cell.id}
-                      className={`py-3 align-top ${cell.column.id === 'model' ? 'w-[320px] min-w-[320px] max-w-[320px]' : ''} ${cell.column.id === 'company' ? 'w-[220px] min-w-[220px] max-w-[220px]' : ''} ${showDetails && cell.column.id === 'date' ? 'w-[130px] min-w-[130px]' : ''} ${showDetails && cell.column.id === 'link' ? 'w-[180px] min-w-[180px] max-w-[180px]' : ''}`}
-                    >
-                      {cell.column.id === 'rank' ? (
-                        <span className="font-mono text-xs text-muted-foreground">
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell
+                        key={cell.id}
+                        className={`py-3 align-top ${cell.column.id === 'rank' ? 'w-[64px] min-w-[64px]' : ''} ${cell.column.id === 'model' ? (showDetails ? 'w-[320px] min-w-[320px] max-w-[320px]' : 'w-[260px] min-w-[260px] max-w-[260px]') : ''} ${cell.column.id === 'company' ? 'w-[220px] min-w-[220px] max-w-[220px]' : ''} ${cell.column.id === 'score' ? 'w-[180px] min-w-[180px]' : ''} ${showDetails && cell.column.id === 'date' ? 'w-[130px] min-w-[130px]' : ''} ${showDetails && cell.column.id === 'link' ? 'w-[180px] min-w-[180px] max-w-[180px]' : ''}`}
+                      >
+                        {cell.column.id === 'rank' ? (
+                          <span className="font-mono text-xs text-muted-foreground">
                           {(rowPosition + 1).toString().padStart(2, '0')}
                         </span>
                       ) : (
