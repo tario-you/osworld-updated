@@ -153,7 +153,7 @@ export function SelfReportedTable({ rows, showDetails }: SelfReportedTableProps)
                     <img
                       src={providerIcon.src}
                       alt={providerIcon.alt}
-                      className="h-4 w-4 shrink-0 rounded-sm object-contain"
+                      className="h-5 w-5 shrink-0 rounded-sm object-contain"
                       loading="lazy"
                     />
                   )}
@@ -165,7 +165,7 @@ export function SelfReportedTable({ rows, showDetails }: SelfReportedTableProps)
                     <img
                       src={providerIcon.src}
                       alt={providerIcon.alt}
-                      className="h-4 w-4 shrink-0 rounded-sm object-contain"
+                      className="h-5 w-5 shrink-0 rounded-sm object-contain"
                       loading="lazy"
                     />
                   )}
