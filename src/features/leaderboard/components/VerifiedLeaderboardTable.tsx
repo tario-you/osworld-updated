@@ -8,7 +8,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { ArrowDown, ArrowUp, ArrowUpDown, ChevronDown, ChevronRight } from 'lucide-react';
+import { ArrowDown, ArrowUp, ArrowUpDown, Bot, ChevronDown, ChevronRight } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -154,25 +154,29 @@ export function VerifiedLeaderboardTable({
                   rel="noreferrer"
                   className="flex min-w-0 items-center gap-2 font-medium text-primary hover:underline"
                 >
-                  {providerIcon && (
+                  {providerIcon ? (
                     <img
                       src={providerIcon.src}
                       alt={providerIcon.alt}
                       className="h-5 w-5 shrink-0 rounded-sm object-contain"
                       loading="lazy"
                     />
+                  ) : (
+                    <Bot className="h-5 w-5 shrink-0 text-muted-foreground" />
                   )}
                   <span className="truncate">{row.model}</span>
                 </a>
               ) : (
                 <div className="flex min-w-0 items-center gap-2">
-                  {providerIcon && (
+                  {providerIcon ? (
                     <img
                       src={providerIcon.src}
                       alt={providerIcon.alt}
                       className="h-5 w-5 shrink-0 rounded-sm object-contain"
                       loading="lazy"
                     />
+                  ) : (
+                    <Bot className="h-5 w-5 shrink-0 text-muted-foreground" />
                   )}
                   <p className="truncate font-medium">{row.model}</p>
                 </div>

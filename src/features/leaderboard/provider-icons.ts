@@ -28,6 +28,7 @@ import opengvlabIcon from '@/assets/provider-icons/opengvlab.png';
 import openinterpreterIcon from '@/assets/provider-icons/openinterpreter.svg';
 import primeIntellectIcon from '@/assets/provider-icons/prime-intellect.png';
 import qwenIcon from '@/assets/provider-icons/qwen.png';
+import robotIcon from '@/assets/provider-icons/robot.svg';
 import salesforceIcon from '@/assets/provider-icons/salesforce.svg';
 import shlabIcon from '@/assets/provider-icons/shlab.png';
 import simularIcon from '@/assets/provider-icons/simular.png';
@@ -60,6 +61,7 @@ const ICONS = {
   hku: { src: hkuIcon, alt: 'University of Hong Kong icon' },
   moonshot: { src: moonshotIcon, alt: 'Moonshot icon' },
   qwen: { src: qwenIcon, alt: 'Qwen icon' },
+  robot: { src: robotIcon, alt: 'Robot icon' },
   salesforce: { src: salesforceIcon, alt: 'Salesforce icon' },
   google: { src: googleIcon, alt: 'Google icon' },
   zhipu: { src: zhipuIcon, alt: 'Zhipu icon' },
@@ -304,7 +306,7 @@ export function resolveProviderIcon(
   const normalizedSourceDomain = toSourceDomain(sourceUrl);
 
   if (normalizedInstitution.includes('reference baseline') || normalizedModel.includes('human baseline')) {
-    return null;
+    return ICONS.robot;
   }
 
   for (const rule of PROVIDER_RULES) {
@@ -325,5 +327,5 @@ export function resolveProviderIcon(
     }
   }
 
-  return null;
+  return ICONS.robot;
 }
